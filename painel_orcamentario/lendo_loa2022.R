@@ -1,5 +1,6 @@
 library(readxl)
 library(tidyverse)
+library(plotly)
 
 
 # Quadro de detalhamento de despesas com informações de crédito  --------
@@ -82,6 +83,19 @@ qdd %>% group_by(FUNCAO, SUB_FUNCAO, NOME_PROGRAMA, NOME_ACAO, FONTE, IPU) %>%
 
 
 
+# Descrição programas -----------------------------------------------------
+
+
+programas <- openxlsx::read.xlsx("dados/programas_planejamento.xlsx")
+
+programas %>% group_by(Nome.do.Programa, Justificativa, Estratégia.de.Implementação, Órgão.Responsável.pelo.Programa) %>% 
+  summarise(n = n()) %>% View()
+
+## Tirando linhas duplicadas
+
+
+lista_programas <- programas %>% select(Nome.do.Programa, Justificativa, Estratégia.de.Implementação, Órgão.Responsável.pelo.Programa, Área.Temática) %>% 
+  filter(!duplicated(Nome.do.Programa))
 
 
 
@@ -91,7 +105,31 @@ qdd %>% group_by(FUNCAO, SUB_FUNCAO, NOME_PROGRAMA, NOME_ACAO, FONTE, IPU) %>%
 
 
 
+# Testando graficos -------------------------------------------------------
 
 
+p <- lista_programas %>% group_by(Órgão.Responsável.pelo.Programa) %>% 
+  summarise(n = n()) %>% 
+  select("Órgão" = Órgão.Responsável.pelo.Programa, "Número de programas" = n) %>%
+  ggplot(aes(x = reorder(Órgão, `Número de programas`), y = `Número de programas`)) +
+  geom_col(fill = "red") +
+  geom_label(aes(label = `Número de programas`), fill = "#ff8080") +
+  coord_flip() +
+  theme_bw() +
+  labs(x="", y="", title = "Número de programas do PPAG 2020-2023 por órgão") +
+  theme(axis.text.x = element_blank())
+  
+
+ggplotly(p)
 
   
+lista_programas %>% group_by(Área.Temática) %>% 
+  summarise(n = n()) %>% 
+  select("Área" = Área.Temática, "Número de programas" = n) %>%
+  ggplot(aes(x = reorder(Área, `Número de programas`), y = `Número de programas`)) +
+  geom_col(fill = "red") +
+  geom_label(aes(label = `Número de programas`), fill = "#ff8080") +
+  coord_flip() +
+  theme_bw() +
+  labs(x="", y="", title = "Número de programas do PPAG 2020-2023 por área temática") +
+  theme(axis.text.x = element_blank())

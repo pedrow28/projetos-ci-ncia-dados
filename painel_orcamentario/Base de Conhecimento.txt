@@ -1,0 +1,9 @@
+Shiny App
+
+New Zealand Trade Intelligence Dashboard - navigation and header:
+(https://github.com/rstudio/shiny-gallery/blob/master/nz-trade-dash/ui.R)
+
+https://shiny.rstudio.com/gallery/nz-trade-dash.html
+
+HTML no Markdown: https://bookdown.org/yihui/rmarkdown/html-document.html
+
