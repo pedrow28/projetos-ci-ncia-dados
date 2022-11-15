@@ -1,9 +1,13 @@
 Shiny App
 
-New Zealand Trade Intelligence Dashboard - navigation and header:
-(https://github.com/rstudio/shiny-gallery/blob/master/nz-trade-dash/ui.R)
+New Zealand Trade Intelligence Dashboard - navigation and header (https://github.com/rstudio/shiny-gallery/blob/master/nz-trade-dash/ui.R)
 
 https://shiny.rstudio.com/gallery/nz-trade-dash.html
 
-HTML no Markdown: https://bookdown.org/yihui/rmarkdown/html-document.html
+HTML and Shiny
 
+https://shiny.rstudio.com/articles/html-tags.html#:~:text=You%20can%20use%20HTML%20to,directly%20with%20Shiny's%20tags%20object.
+https://shiny.rstudio.com/articles/tag-glossary.html
+
+Responsive 
+https://shiny.rstudio.com/gallery/kmeans-example.html

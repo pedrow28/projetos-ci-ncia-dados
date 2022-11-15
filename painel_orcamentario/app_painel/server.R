@@ -10,35 +10,23 @@
 library(shiny)
 library(plotly)
 library(DT)
+library(openxlsx)
 
 # Define server logic required to draw a histogram
 
 
 
-# DADOS -------------------------------------------------------------------
+# Servidor ----------------------------------------------------------------
 
 
-programas <- openxlsx::read.xlsx("dados/programas_planejamento.xlsx")
-
-lista_programas <- programas %>% select(Nome.do.Programa, Justificativa, Estratégia.de.Implementação, Unidade.Orçamentária.Responsável.pelo.Programa, Área.Temática) %>% 
-  filter(!duplicated(Nome.do.Programa))
 
 
 shinyServer(function(input, output, session) {
   
-  
+
 
 # Tabela programas por órgão ---------------------------------------------
 
-  
-
-  
-    dados_orgao_programa <- lista_programas %>% group_by(Unidade.Orçamentária.Responsável.pelo.Programa) %>% 
-      summarise(n = n()) %>% 
-      select("Órgão" = Unidade.Orçamentária.Responsável.pelo.Programa, "Número de programas" = n) %>% 
-      arrange(-`Número de programas`) %>% 
-      datatable(rownames = FALSE)
-  
     output$programa_orgao <- renderDT({
       
       dados_orgao_programa
@@ -50,9 +38,7 @@ shinyServer(function(input, output, session) {
 
 # Grafico programa area tematica ------------------------------------------
 
-     dados_area_programa  <- lista_programas %>% group_by(Área.Temática) %>% 
-       summarise(n = n()) %>% 
-       select("Área" = Área.Temática, "Número de programas" = n)
+
      
      output$programa_area <- renderPlot({
        
@@ -75,23 +61,6 @@ shinyServer(function(input, output, session) {
 
 # Tabela todos os programas -----------------------------------------------
 
-
-     ## Lista órgãos
-     
-     orgaos <- programas %>% pull(Unidade.Orçamentária.Responsável.pelo.Programa) %>% unique() %>% sort()
-     
-     # orgaos <- orgaos[3:141]
-     
-     lista_selecao_orgaos <- c("TODOS") %>% append(orgaos)
-     
-     
-     
-     ## Lista area tematica
-     
-     areas <- programas %>% pull(Área.Temática) %>% unique() %>% sort()
-     
-     
-     lista_selecao_areas <- c("TODAS") %>% append(areas)
      
      
      ## Atualizando listas de escolhas dinamicamente
@@ -131,6 +100,14 @@ shinyServer(function(input, output, session) {
      })
       
 
+      ## Download data
+     
+     output$download_programas <- downloadHandler(
+       filename = "Lista Programas.csv",
+       content = function(file) {
+         write.csv(programasInput(), file, row.names = FALSE)
+       }
+     )
     
 
 })
