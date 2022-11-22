@@ -138,7 +138,7 @@ body <- dashboardBody(
   
     tabItem(tabName = "introducao_orcamento",
             
-            tags$h1("O que é o Orçamento Público?"),
+            tags$h2("O que é o Orçamento Público?"),
             
             tags$div(
               tags$p("O orçamento público é o instrumento por meio do qual o governo define o total de recursos que necessita
@@ -159,22 +159,52 @@ body <- dashboardBody(
                    ),
             
             
-            tags$h1("Os instrumentos do orçamento público"),
+            tags$h2("Os instrumentos do orçamento público"),
             
             tags$div(
               tags$p("Como dito na sessão anterior, a Constituição Federal estabelece os instrumentos utilizados pela
                      administração pública para planejamento, elaboração e execução do orçmaneto público. São eles:"),
               tags$ul(
-                tags$li("O ", tags$b("Plano Plurianual - PPA"), " (no caso de Minas Gerais, o Plano Plurianual de Governo - PPAG);"),
-                tags$li("A ",tags$b("Lei de Diretrizes Orçamentárias - LDO"), ";"),
+                tags$li("O ", tags$b("Plano Plurianual - PPA"), " (no caso de Minas Gerais, o Plano Plurianual de Governo - PPAG)."),
+                tags$li("A ",tags$b("Lei de Diretrizes Orçamentárias - LDO"), "."),
                 tags$li("A ", tags$b("Lei Orçamentária Anual - LOA"), ".")
                     ),
               
-              tags$p(),
-            )
+              tags$p("A sessão 'Instrumentos Orçamentários' deste painel apresenta maiores explicações sobre cada um dos instrumentos.
+                     De forma geral, os instrumentos funcionam e se complementam da seguinte maneira:"),
+              tags$ol(
+                tags$li(tags$b("O PPA é o planejamento de longo prazo."), "Visa estabelecer, no horizonte de 4 anos, ", 
+                        tags$b("as diretrizes, objetivos e metas da administração pública"), "
+                        e que, portanto nortearão a elaboração orçamentária. No PPA estão previstos os programas e objetivos estratégicos do governo."),
+                tags$li(tags$b("O LDO é o manual de regras para elaboração do orçamento."), "Na lei, estão previstos os elementos 
+                        que deverão ser levados em conta para elaboração do orçamento de fato, como as metas fiscais e de crescimento econômico
+                        e a metodologia e premissas utilizadas para elaboração do orçamento."),
+                tags$li(tags$b("A LOA é o orçamento de fato."), "Na LOA está toda a receita e despesa que o governo planeja para o ano (exercício financeiro).
+                        É na LOA que podemos ver quando o governo planeja arrecadar com cada imposto ou gastar com cada secretaria, por exemplo.")
+                
+              )
+                   ),
             
+            tags$h2("Algumas curiosidades"),
             
+            tags$div(
+              tags$ul(
+                tags$li("Os instrumentos orçamentários são elaborados e aprovados no ano anterior. Assim, no primeiro ano de cada gestão
+                        o governo utiliza o orçamento elaborado pelo seu antecessor."),
+                tags$li("O Estado de Minas Gerais possui, além dos intrumentos mencionados, o",
+                        HTML(paste0(a(href="https://www.almg.gov.br/acompanhe/planejamento_orcamento_publico/pmdi/index.html",
+                               "Plano Mineiro de Desenvolvimento Integrado"))),
+                        "planejamento de horizonte temporal ainda maior que o previsto no PPA."),
+                tags$li("Ainda sobre a administração pública mineira, o PPA mineiro é chamado Plano Plurianual de Governo - PPAG.")
+              )
             ),
+            
+    ),
+            
+            
+            
+            
+            
     
   ## 3.2 Instrumentos Orçamentos ------------------------------------------
   
@@ -184,6 +214,8 @@ body <- dashboardBody(
   
     tabItem(tabName = "ppa",
             tags$h1("Plano Plurianual - PPA"),
+            
+            tags$h2("O que é o Plano Plurianual?"),
             
             tags$h2("Programas do Planejamento do Estado de Minas Gerais (PPAG 2020-2023)"),
             
@@ -286,8 +318,9 @@ body <- dashboardBody(
     )
   
     
-  )
+    )
 )
+
 
 
 
