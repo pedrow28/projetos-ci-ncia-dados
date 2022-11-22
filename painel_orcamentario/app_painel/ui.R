@@ -6,6 +6,11 @@ library(DT)
 library(openxlsx)
 
 
+
+# sourcing ----------------------------------------------------------------
+
+# source("suporte_dados.R")
+
 # Fontes ------------------------------------------------------------------
 
 url_base_monitoramento <- "https://drive.google.com/drive/folders/1Wymwxghju1j0eeVEvEyyG_RDu3vEnVpm"
@@ -71,11 +76,13 @@ siderbar <-
     sidebarMenu(
       id = 'sidebar',
       menuItem("Introdução",
-               menuSubItem("Objetivos deste painel", tabName = "introducao")),
+               menuSubItem("Objetivos deste painel", tabName = "introducao"),
+               menuSubItem("Introdução ao Orçamento Público", tabName = "introducao_orcamento")),
       menuItem("Instrumentos orçamentarios", tabname = "instrumento_orcamento",
                menuSubItem("PPA", tabName = "ppa"),
                menuSubItem("LDO", tabName = "ldo"),
-               menuSubItem("LOA", tabName = "loa")),
+               menuSubItem("LOA", tabName = "loa"),
+               menuSubItem("Pesquisa Dotações Orçamentárias"), tabName = "pesquisa_dotacoes"),
       menuItem("Monitoramento Orçamento", tabName = "monitoramento",
                menuSubItem("Programas de Governo", tabName = "monitoramento_programa"),
                menuSubItem("Órgãos", tabName = "orgaos")),
@@ -94,6 +101,11 @@ body <- dashboardBody(
   tabItems(
     
   ## 3.1 Introducao ----------------------------------------------------------
+  
+
+  ### 3.1.1 Objetivos ---------------------------------------------------------
+
+  
     
     tabItem(tabName = "introducao",
             tags$h1("Objetivos deste painel"),
@@ -121,6 +133,48 @@ body <- dashboardBody(
                 
               )
             )),
+  
+  ### 3.1.1 Introdução Orçamento Público ---------------------------------------------------------
+  
+    tabItem(tabName = "introducao_orcamento",
+            
+            tags$h1("O que é o Orçamento Público?"),
+            
+            tags$div(
+              tags$p("O orçamento público é o instrumento por meio do qual o governo define o total de recursos que necessita
+                     para cumprir seus objetivos, fixando a forma como ele irá",
+                     tags$b("arrecadar (receitas)"),
+                     "e ",
+                     tags$b("gastar (despesas)"), 
+                     "tais recursos."),
+              
+              tags$p("Como tudo na administração pública, o orçamento público é normatizado por meio de legislação específica.
+                     Sendo as mais importantes a ",
+                     HTML(paste0(a(href = "https://www.planalto.gov.br/ccivil_03/LEIS/L4320.htm", "Lei nº 4.320/1964"))),
+                     " que regulamenta ",
+                     tags$b("como deve ser elaborado e controlado o orçamento público"),
+                     "e o ",
+                     HTML(paste0(a(href = "https://constituicao.stf.jus.br/dispositivo/cf-88-parte-1-titulo-6-capitulo-2-secao-2-artigo-165","Artigo 165 da Constituição Federal"))),
+                     "que estabelecem os instrumentos orçamentários da administração pública."),
+                   ),
+            
+            
+            tags$h1("Os instrumentos do orçamento público"),
+            
+            tags$div(
+              tags$p("Como dito na sessão anterior, a Constituição Federal estabelece os instrumentos utilizados pela
+                     administração pública para planejamento, elaboração e execução do orçmaneto público. São eles:"),
+              tags$ul(
+                tags$li("O ", tags$b("Plano Plurianual - PPA"), " (no caso de Minas Gerais, o Plano Plurianual de Governo - PPAG);"),
+                tags$li("A ",tags$b("Lei de Diretrizes Orçamentárias - LDO"), ";"),
+                tags$li("A ", tags$b("Lei Orçamentária Anual - LOA"), ".")
+                    ),
+              
+              tags$p(),
+            )
+            
+            
+            ),
     
   ## 3.2 Instrumentos Orçamentos ------------------------------------------
   
@@ -176,6 +230,11 @@ body <- dashboardBody(
           tags$h3("Orçamento por programas"),
           tags$h3("Orçamento por órgãos"),
           tags$h3("Orçamento por área temática"),),
+  
+  ### 3.2.4 Ferramenta de consulta a Dotações Orçamentárias ----------------------
+  
+  tabItem(tabName = "pesquisa_dotacoes"),
+  
   
   ## Colocar orçamento por pasta e por area tematica
   
