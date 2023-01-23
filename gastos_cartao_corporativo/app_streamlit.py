@@ -63,7 +63,7 @@ Com isso, os gastos dos ex-presidentes podem ser acessados [neste link](https://
 Dado o grande período de tempo dos dados, qualquer comparação feita **deve levar em conta o ajuste dos preços
 a partir da inflação do período**. 
 
-Para este aplicativo, este ajuste foi feito utilizando uma [query](https://github.com/pedrow28/projetos-ciencia-dados/blob/main/gastos_cartao_corporativo/sql_query_bd.sql) 
+Para este aplicativo, este ajuste foi feito utilizando uma [query](https://github.com/pedrow28/projetos-ciencia-dados/blob/main/gastos_cartao_corporativo/nova_query.sql) 
 em SQL desenvolvida na comunidade de programadores da [Base dos Dados](https://basedosdados.org/quem-somos), organização não-governamental e 
 _open-source_ que atua para universalizar dados de qualidade.
 
