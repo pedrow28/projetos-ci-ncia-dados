@@ -105,7 +105,7 @@ fig = px.bar(sum_by_year.reset_index(), x="ano",
              color='presidente')
 st.plotly_chart(fig, use_container_width=True)
 
-## TODO: formatar valores (R$)
+## TODO: formatar valores ()
 
 
 st.markdown("## Maiores gastos por presidente")
