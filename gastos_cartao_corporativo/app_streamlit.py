@@ -1,5 +1,9 @@
 import streamlit as st
 import pandas as pd
+import plotly.express as px
+import plotly.figure_factory as ff
+
+
 
 
 ### Importando os dados
@@ -8,9 +12,20 @@ import pandas as pd
 
 ### Limpando os dados
 
-data = pd.read_feather("cleaned_feather_data")
+data_id = pd.read_feather("feather_data_id")
+
+data = data_id.drop_duplicates(subset=["id"])
+
+
+
+########################
 
 st.title("Gastos Cartão Corporativo")
+
+
+
+
+##TODO: Inserir imagem ilustrativa
 
 SUBELEMENTOS = data["subelemento_despesa"].unique()
 
@@ -19,8 +34,8 @@ PRESIDENTES = ["Lula", "Dilma", "Temer", "Bolsonaro"]
 ## Sidebar
 
 with st.sidebar:
-    st.selectbox(label = "Presidentes", options=PRESIDENTES)
-    st.selectbox(label = "Tipo gasto", options=SUBELEMENTOS)
+    presidente = st.selectbox(label = "Presidentes", options=PRESIDENTES)
+    tipo_gasto = st.selectbox(label = "Tipo gasto", options=SUBELEMENTOS)
 
 st.markdown("## Introdução")
 
@@ -58,4 +73,47 @@ que pode ser acessado [aqui](https://basedosdados.org/dataset/br-ibge-ipca?bdm_t
 
 """
 
-st.markdown("Visão geral dos gastos")
+st.markdown("## Visão geral dos gastos")
+
+### Querys para formatar a informacao
+
+### query = f"presidente=='{presidente}' & subelemento_despesa=='{tipo_gasto}'"
+### df_filtered = data.query(query)
+
+query = f"presidente == @presidente & subelemento_despesa == @tipo_gasto"
+
+df_presidentes_geral = data.groupby
+
+df_filtered = data.query(query)
+
+df_filtered_grouped = df_filtered.groupby('ano').valor_ajustado.sum()
+
+index = df_filtered_grouped
+
+sum_by_year = data.groupby(['ano', 'presidente']).valor_hist_ajustado.sum()
+
+## Removendo outliers
+
+nivel_outlier = data.valor_hist_ajustado.quantile(0.9)
+
+data_sem_outliers = data[data["valor_hist_ajustado"] < nivel_outlier]
+
+sum_by_year_limpo = data_sem_outliers.groupby(['ano', 'presidente']).valor_hist_ajustado.sum()
+
+fig = px.bar(sum_by_year.reset_index(), x="ano",
+             y="valor_hist_ajustado",
+             color='presidente')
+st.plotly_chart(fig, use_container_width=True)
+
+## TODO: formatar valores (R$)
+
+
+st.markdown("## Maiores gastos por presidente")
+
+st.markdown("## Gastos por presidente e tipo de despesa")
+
+st.markdown("## Gastos totais em período e tipo")
+
+st.markdown("## Dados completos")
+
+###### CÓDIGO FONTE
