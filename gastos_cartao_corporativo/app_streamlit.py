@@ -12,10 +12,16 @@ import plotly.figure_factory as ff
 
 ### Limpando os dados
 
-data_id = pd.read_feather("feather_data_id")
+@st.cache
+def get_data():
 
-data = data_id.drop_duplicates(subset=["id"])
+    data_id = pd.read_feather("feather_data_id")
 
+    df = data_id.drop_duplicates(subset=["id"])
+
+    return df
+ 
+data = get_data()
 
 
 ########################
