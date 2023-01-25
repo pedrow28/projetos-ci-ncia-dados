@@ -211,6 +211,8 @@ with left_column:
     
     ## TODO: Melhorar isso aqui - puxar o valor final da média para imprimir
     
+    ## TODO: Mudar para ficar com mesmo eixo y, utilizar funcao max entre Df comps 1 e 2
+    
     grouped_comp1 = df_comp1.groupby(['ano']).valor_hist_ajustado.sum().reset_index()
     
     media1 = grouped_comp1.mean()
