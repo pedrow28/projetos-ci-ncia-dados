@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import plotly.figure_factory as ff
+import numpy as np
+from PIL import Image
 
 
 
@@ -15,6 +17,9 @@ import plotly.figure_factory as ff
 st.set_page_config(page_title="Gastos Cartões Corporativos", page_icon="💸", layout="wide"  )
 
 #, layout="wide"
+
+
+    
 
 @st.cache
 def get_data():
@@ -36,9 +41,24 @@ data = get_data()
 
 ########################
 
+#💸
 
 
-st.title("Gastos Cartão Corporativo 💸")
+st.title("Gastos Cartão Corporativo")
+
+## TODO: Align
+
+left_column, center_column, right_column = st.columns(3)
+
+image = Image.open('brasaooficialcolorido.png')
+
+with center_column:
+    st.image(image)
+
+
+blue_line = "<hr style='color: #0000cc'>"
+
+st.write(blue_line, unsafe_allow_html=True)
 
 
 
@@ -68,7 +88,7 @@ Presidência da República](https://g1.globo.com/politica/noticia/2023/01/12/vej
 Assim, no intuito de melhor organizar a pesquisa e visualização dos dados disponibilizados, este aplicativo
 foi construído para sanear as informações e disponibilizar filtros e  visualizações mais acessíveis. 
 
-## Alguns esclarecimentos
+### Alguns esclarecimentos
 
 Antes, porém, alguns esclarecimentos sobre o tratamento dos dados e este aplicativo são necessários.
 
@@ -80,7 +100,7 @@ recebeu da Secretaria-Geral da Presidência da República os dados dos gastos do
 Com isso, os gastos dos ex-presidentes podem ser acessados [neste link](https://www.gov.br/secretariageral/pt-br/acesso-a-informacao/informacoes-classificadas-e-desclassificadas).
 
 
-## Tratamento dos dados
+### Tratamento dos dados
 
 Dado o grande período de tempo dos dados, qualquer comparação feita **deve levar em conta o ajuste dos preços
 a partir da inflação do período**. 
@@ -94,6 +114,8 @@ que pode ser acessado [aqui](https://basedosdados.org/dataset/br-ibge-ipca?bdm_t
 
 
 """
+
+st.markdown("""---""")
 
 st.markdown("## Visão geral dos gastos")
 
@@ -121,7 +143,7 @@ sum_by_year = data.groupby(['ano', 'presidente']).valor_hist_ajustado.sum()
 fig = px.bar(sum_by_year.reset_index(), x="ano",
              y="valor_hist_ajustado",
              color='presidente',
-             title="Gastos do cartão corporativo entre 2003 e 2022 <br><sup> Valores atualizados pela inflação (R$)</sup>",
+             title="Gastos do cartão corporativo entre 2003 e 2022 <br><sup> Valores atualizados pela inflação (R$)",
              labels={
                  "ano": "Ano",
                  "valor_hist_ajustado": "Valor ajustado pela inflação (R$)",
@@ -135,6 +157,7 @@ st.plotly_chart(fig, use_container_width=True)
 ## TODO: formatar valores ()
 ## TODO: Layout gráfico
 
+st.markdown("""---""")
 
 st.markdown("## Maiores gastos por presidente")
 
@@ -164,7 +187,12 @@ fig2 = px.bar(maiores_gastos_presidente.reset_index(), y = "subelemento_despesa"
 fig2.update_layout(yaxis=(dict(title="")))
 st.plotly_chart(fig2, use_container_width=True)
 
-  
+    
+## TODO: Adicionar labels nas colunas
+
+## TODO: Customizar site
+
+st.markdown("""---""")
 
 st.markdown("## Gastos por presidente e tipo de despesa")
 
@@ -175,7 +203,7 @@ with left_column:
     presidente_2 = st.multiselect(label = "Escolha um presidente", options=PRESIDENTES, default=PRESIDENTES)
     
 with right_column:
-    elemento_despesa1 = st.selectbox(label = "Escolha um tipo de despesa", options=sorted(SUBELEMENTOS))
+    elemento_despesa1 = st.selectbox(label = "Escolha um tipo de despesa", options=sorted(SUBELEMENTOS), index=32)
     
 query_filtro_presid_despesa = f"presidente == @presidente_2 & subelemento_despesa == @elemento_despesa1"
 
@@ -189,66 +217,35 @@ gastos_filtro_presid_elemento = df_presid_despesa.groupby(['ano', 'presidente'])
 
 fig3 = px.bar(gastos_filtro_presid_elemento.reset_index(), x = "ano",
               y = "valor_hist_ajustado",
-              color = "presidente")
+              color = "presidente",
+              labels={
+                  "ano": "Ano",
+                 "valor_hist_ajustado": "Valor ajustado pela inflação (R$)",
+                 "subelemento_despesa": "Tipo de despesa"
+             })
 
+fig3.update_layout(yaxis=(dict(title="")))
 st.plotly_chart(fig3, use_container_width=True)
 
+st.markdown("""---""")
 
-
-st.markdown("## Comparação presidentes")
-
-st.markdown("Os gráficos abaixo comparam os gastos, por ano, de dois presidentes em determinado tipo de despesa.")
-
-left_column, right_column = st.columns(2)
-
-with left_column:
-    comp_presidente_1 = st.selectbox(label = "Presidente 1", options=PRESIDENTES)
-    comp_despesa_1 = st.selectbox(label = "Despesa 1", options=sorted(SUBELEMENTOS))
-    
-    query_comparativo1 = f"presidente == @comp_presidente_1 & subelemento_despesa== @comp_despesa_1"
-    
-    df_comp1 = data.query(query_comparativo1)
-    
-    ## TODO: Melhorar isso aqui - puxar o valor final da média para imprimir
-    
-    ## TODO: Mudar para ficar com mesmo eixo y, utilizar funcao max entre Df comps 1 e 2
-    
-    grouped_comp1 = df_comp1.groupby(['ano']).valor_hist_ajustado.sum().reset_index()
-    
-    media1 = grouped_comp1.mean()
-    
-    ## TODO: descobrir como multistring para o titulo do grafico
-    
-    figcomp1 = px.bar(df_comp1.groupby(['ano']).valor_hist_ajustado.sum().reset_index(),
-                      x="ano",
-                      y="valor_hist_ajustado",
-                      title = f"Gastos - Presidente {comp_presidente_1} com {comp_despesa_1}  <br><sup>A média foi de {media1}</sup>")
-
-    st.plotly_chart(figcomp1, use_container_width=True) 
-
-with right_column:
-    comp_presidente_2 = st.selectbox(label = "Presidente 2", options=PRESIDENTES)
-    comp_despesa_2 = st.selectbox(label = "Despesa 2", options=sorted(SUBELEMENTOS))
-    
-    query_comparativo2 = f"presidente == @comp_presidente_2 & subelemento_despesa == @comp_despesa_2"
-    
-    df_comp2 = data.query(query_comparativo2)
-    
-    figcomp2 = px.bar(df_comp2.groupby(['ano']).valor_hist_ajustado.sum().reset_index(),
-                      x="ano",
-                      y="valor_hist_ajustado",
-                      title = f"Gastos - Presidente {comp_presidente_2} com {comp_despesa_2}")
-    
-## TODO: Adicionar labels nas colunas
-
-## TODO: Customizar site
-
-    st.plotly_chart(figcomp2, use_container_width=True) 
+st.markdown("## Download de informações")
                                   
-                                  
+"""
+Os dados completos podem ser baixados no formato CSV no botão abaixo.
+"""
+
+df_csv = data.to_csv()
+
+st.download_button(
+    label="Download como CSV",
+    data=df_csv,
+    file_name='gastos_cartao_corportivo.csv',
+    mime='text/csv',
+)                            
                             
 
-
+st.markdown("""---""")
 
 st.markdown("## Informações técnicas")
 
@@ -260,9 +257,20 @@ O código completo pode ser encontrado [aqui](https://github.com/pedrow28/projet
 
 Encontrou algum erro ou possui alguma sugestão? Entre em [contato](mailto:pedrowilliamrd@gmail.com)!
 
+Aproveite para me seguir no [GitHub](https://github.com/pedrow28) e também no [Linkedin](https://www.linkedin.com/in/pedrowilliamrd/)!
+
 """
 
 ## TODO: inserie imagens para link linkedin e github
 
 
-###### CÓDIGO FONTE 
+# ---- HIDE STREAMLIT STYLE ----
+hide_st_style = """
+            <style>
+            #MainMenu {visibility: hidden;}
+            footer {visibility: hidden;}
+            header {visibility: hidden;}
+            
+            </style>
+            """
+st.markdown(hide_st_style, unsafe_allow_html=True)
